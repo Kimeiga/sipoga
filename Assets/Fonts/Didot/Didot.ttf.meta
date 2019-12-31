@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 2d91fefcb9361494dacc4302bb4ff97b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Didot
+  fontNames:
+  - Didot
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0d6907c52a8ad7148b435893d1a1c698, type: 3}
+  - {fileID: 12800000, guid: 11f0c1361b5672a4cb0c328779ac60bc, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
