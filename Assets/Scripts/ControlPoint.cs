@@ -11,12 +11,12 @@ public class ControlPoint : MonoBehaviour
 //
 //    public HashSet<Transform> availableWaypointsCana;
     
-    public float status = 50; // 0 = captured by yena, 50 = uncaptured, 100 = captured by cana 
+    public float status = 50; // 0 = captured by u, 50 = uncaptured, 100 = captured by t 
     public float flagCaptureRate = 1;
     
     public float startStatus = 50;
-    private int yenaCount = 0;
-    private int canaCount = 0;
+    private int uCount = 0;
+    private int tCount = 0;
 
     [Header("Indicators")]
     public GameObject flag; // the colored cube
@@ -25,14 +25,14 @@ public class ControlPoint : MonoBehaviour
     public float flagMinHeight = 0;
     private float flagTargetHeight;
     
-    public Material yenaFlagMaterial;
-    public Material canaFlagMaterial;
+    public Material uFlagMaterial;
+    public Material tFlagMaterial;
     public Material neutralFlagMaterial;
 
     private enum FlagStatus
     {
-        YenaMajority,
-        CanaMajority,
+        UMajority,
+        TMajority,
         Neutral
     }
 
@@ -68,7 +68,7 @@ public class ControlPoint : MonoBehaviour
         // 50 = neutral
         if (0 <= status && status < 50)
         {
-            flagStatus = FlagStatus.YenaMajority;
+            flagStatus = FlagStatus.UMajority;
             
         }
         else if (status == 50) // likely to only happen when initialized
@@ -77,7 +77,7 @@ public class ControlPoint : MonoBehaviour
         }
         else if (50 < status && status <= 100) // can be replaced with just "else"
         {
-            flagStatus = FlagStatus.CanaMajority;
+            flagStatus = FlagStatus.TMajority;
         }
 
 
@@ -95,18 +95,18 @@ public class ControlPoint : MonoBehaviour
                     // set flag light color
                     flag.GetComponent<Light>().color = neutralFlagMaterial.color;
                     break;
-                case FlagStatus.CanaMajority:
-                    flag.GetComponent<Renderer>().material = canaFlagMaterial;
+                case FlagStatus.TMajority:
+                    flag.GetComponent<Renderer>().material = tFlagMaterial;
                     
                     // set flag light color
-                    flag.GetComponent<Light>().color = canaFlagMaterial.color;
+                    flag.GetComponent<Light>().color = tFlagMaterial.color;
                     
                     break;
-                case FlagStatus.YenaMajority:
-                    flag.GetComponent<Renderer>().material = yenaFlagMaterial;
+                case FlagStatus.UMajority:
+                    flag.GetComponent<Renderer>().material = uFlagMaterial;
                     
                     // set flag light color
-                    flag.GetComponent<Light>().color = yenaFlagMaterial.color;
+                    flag.GetComponent<Light>().color = uFlagMaterial.color;
                     
                     break;
             }
@@ -125,8 +125,8 @@ public class ControlPoint : MonoBehaviour
 
             // set laser as interpolation between colors actually
             // that gives the player more information about flag status
-            laser.startColor = Color.Lerp(yenaFlagMaterial.color, neutralFlagMaterial.color, (status / 100) * 2);
-            laser.endColor = Color.Lerp(yenaFlagMaterial.color, neutralFlagMaterial.color, (status / 100) * 2);
+            laser.startColor = Color.Lerp(uFlagMaterial.color, neutralFlagMaterial.color, (status / 100) * 2);
+            laser.endColor = Color.Lerp(uFlagMaterial.color, neutralFlagMaterial.color, (status / 100) * 2);
         }
         else if (50 < status && status <= 100) // can be replaced with "else"
         {
@@ -134,8 +134,8 @@ public class ControlPoint : MonoBehaviour
             flagTargetHeight = Mathf.Lerp(flagMinHeight, flagMaxHeight, ((status / 100) * 2) - 1); // t = [-1, 1] but only second half
             
             
-            laser.startColor = Color.Lerp(neutralFlagMaterial.color, canaFlagMaterial.color, ((status / 100) * 2) - 1);
-            laser.endColor = Color.Lerp(neutralFlagMaterial.color, canaFlagMaterial.color, ((status / 100) * 2) - 1);
+            laser.startColor = Color.Lerp(neutralFlagMaterial.color, tFlagMaterial.color, ((status / 100) * 2) - 1);
+            laser.endColor = Color.Lerp(neutralFlagMaterial.color, tFlagMaterial.color, ((status / 100) * 2) - 1);
         } 
         
         
@@ -151,25 +151,25 @@ public class ControlPoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Yena"))
+        if (other.gameObject.CompareTag("U"))
         {
-            yenaCount++;
+            uCount++;
         }
-        else if (other.gameObject.CompareTag("Cana"))
+        else if (other.gameObject.CompareTag("T"))
         {
-            canaCount++;
+            tCount++;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Yena"))
+        if (other.gameObject.CompareTag("U"))
         {
-            yenaCount--;
+            uCount--;
         }
-        else if (other.gameObject.CompareTag("Cana"))
+        else if (other.gameObject.CompareTag("T"))
         {
-            canaCount--;
+            tCount--;
         }
     }
 
@@ -177,7 +177,7 @@ public class ControlPoint : MonoBehaviour
     {
         //every second, look at current status of occupation and increment status 
         
-        int difference = canaCount - yenaCount; // + = more cana, - = more yena
+        int difference = tCount - uCount; // + = more t, - = more u
         // we want flag capture rate to scale with numbers advantage
         
         // 
@@ -189,7 +189,7 @@ public class ControlPoint : MonoBehaviour
     
             yield return new WaitForSeconds(0.5f);
             
-            difference = canaCount - yenaCount; // + = more cana, - = more yena
+            difference = tCount - uCount; // + = more t, - = more u
             
         }
 

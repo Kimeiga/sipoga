@@ -30,10 +30,11 @@ public class Inventory : MonoBehaviour
     // rather than just looking for things in the level
     // this shows "self sufficiency of squads"
 
-
+    private Player player;
+    
     //Poder Variables
     private bool stateChange;
-
+    
     //Grabbing Behaviour Variables
     private GameObject nextItem;
     private Item nextItemScript;
@@ -134,8 +135,10 @@ public class Inventory : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        fireTransformScript = fireTransform.GetComponent<MouseLook>();
-        bodyTransformScript = transform.GetComponent<MouseLook>();
+        player = GetComponent<Player>();
+        fireTransform = player.head;
+        fireTransformScript = player.headMouseLook;
+        bodyTransformScript = player.bodyMouseLook;
 
         //set ammopanel for ammo updating
         //ammoPanel = ammoText.transform.parent.gameObject;

@@ -477,17 +477,17 @@ public class GameManager : MonoBehaviour
 //    public ControlPoint[] controlPoints;
 
     public int startingTickets;
-    public int canaTickets;
-    public int yenaTickets;
+    public int uTickets;
+    public int tTickets;
 
-    public List<Player> yenaStartingTeam;
-    public List<Player> canaStartingTeam;
+    public List<Player> uStartingTeam;
+    public List<Player> tStartingTeam;
     
-    public KdTree<Player> yenaTeam = new KdTree<Player>();
-    public KdTree<Player> canaTeam = new KdTree<Player>();
+    public KdTree<Player> uTeam = new KdTree<Player>();
+    public KdTree<Player> tTeam = new KdTree<Player>();
 
-    public Transform[] yenaSpawns;
-    public Transform[] canaSpawns;
+    public Transform[] uSpawns;
+    public Transform[] tSpawns;
     
     private void Awake()
     {
@@ -521,14 +521,14 @@ public class GameManager : MonoBehaviour
 //            canaTeam.Add(cana.GetComponent<Player>());
 //        }
         
-        yenaTeam.AddAll(yenaStartingTeam);
-        canaTeam.AddAll(canaStartingTeam);
+        uTeam.AddAll(uStartingTeam);
+        tTeam.AddAll(tStartingTeam);
     }
 
     // Update is called once per frame
     void Update()
     {
-        yenaTeam.UpdatePositions();
-        canaTeam.UpdatePositions();
+        uTeam.UpdatePositions();
+        tTeam.UpdatePositions();
     }
 }

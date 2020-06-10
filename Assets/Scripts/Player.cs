@@ -6,12 +6,15 @@ using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
-    public bool isYena; // true = yena, false = cana
+    public bool isU; // true = u, false = t
     public Transform head;
 
     public float health;
     public float maxHealth = 100;
 
+    public float armor;
+    public float maxArmor = 100;
+    
     [Header("Body Parts")]
     public GameObject torso;
     public GameObject leftLeg;
@@ -26,7 +29,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         health = maxHealth;
-        
+        armor = 0;
     }
 
     public void IncreaseHealth(float change)
@@ -68,7 +71,7 @@ public class Player : MonoBehaviour
     
     public void MakeLowerBodyVisible()
     {
-        string layer = isYena ? "Yena" : "Cana";
+        string layer = isU ? "U" : "T";
         // torso.layer = LayerMask.NameToLayer(layer);
         // leftLeg.layer = LayerMask.NameToLayer(layer);
         // rightLeg.layer = LayerMask.NameToLayer(layer);
