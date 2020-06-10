@@ -15,12 +15,12 @@ public class SimpleCPAI : MonoBehaviour
     
     public NavMeshQueryFilter controlPointFilter;
     
-    private bool isYena; // 1 = Yena, 0 = Cana
+    private bool isU; // 1 = U, 0 = T
     // Start is called before the first frame update
     void Start()
     {
         player = GetComponent<Player>();
-        isYena = player.isYena;
+        isU = player.isU;
         navMeshAgent = GetComponent<NavMeshAgent>();
 //        if (isYena)
 //        {
@@ -37,7 +37,7 @@ public class SimpleCPAI : MonoBehaviour
 //        NavMesh.SamplePosition()
 
         controlPointFilter.areaMask = 1 << 3;
-        desiredStatus = isYena ? 0 : 100;
+        desiredStatus = isU ? 0 : 100;
         
         
 //        Transform randomWaypoint = controlPoint.waypoints[Random.Range(0, controlPoint.waypoints.Length)];

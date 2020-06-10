@@ -63,9 +63,9 @@ public class SimpleShootEnemy : MonoBehaviour
 //            GameManager.instance.canaTeam.FindClosestWithCondition(transform.position, IsInFOV) :
 //            GameManager.instance.yenaTeam.FindClosestWithCondition(transform.position, IsInFOV));
         
-        Player chosenEnemy = player.isYena ?
-            GameManager.instance.canaTeam.FindClosestWithCondition(transform.position, IsValidEnemy) :
-            GameManager.instance.yenaTeam.FindClosestWithCondition(transform.position, IsValidEnemy);
+        Player chosenEnemy = player.isU ?
+            GameManager.instance.tTeam.FindClosestWithCondition(transform.position, IsValidEnemy) :
+            GameManager.instance.uTeam.FindClosestWithCondition(transform.position, IsValidEnemy);
         
 //        print(chosenEnemy.gameObject.name);
 
