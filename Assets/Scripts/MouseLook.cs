@@ -10,7 +10,8 @@ using DG.Tweening;
 public class MouseLook : MonoBehaviour
 {
     public bool canRotate = true;
-    
+    public bool offsetOnly;
+
     public enum RotationAxes
     {
         MouseXAndY = 0,
@@ -35,11 +36,21 @@ public class MouseLook : MonoBehaviour
 
     public float xOffset = 0;
     public float yOffset = 0;
-    
+
     // may have to add turnOffset if we add "skiing"
-    
+    public float tiltAmount = 0;
+
     void Update()
     {
+        if (offsetOnly)
+        {
+            Quaternion xQuaternion = Quaternion.AngleAxis(xOffset, Vector3.up);
+            Quaternion yQuaternion = Quaternion.AngleAxis(yOffset, -Vector3.right);
+
+            transform.localRotation = originalRotation * xQuaternion * yQuaternion;
+            return;
+        }
+
         if (axes == RotationAxes.MouseXAndY)
         {
             if (canRotate)
@@ -70,14 +81,24 @@ public class MouseLook : MonoBehaviour
         }
         else
         {
+            // this will be for the head
+
             if (canRotate)
             {
                 rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
                 rotationY = ClampAngle(rotationY, minimumY, maximumY);
             }
 
+
             Quaternion yQuaternion = Quaternion.AngleAxis(rotationY + yOffset, -Vector3.right);
-            transform.localRotation = originalRotation * yQuaternion;
+            Quaternion tempRot = originalRotation * yQuaternion;
+
+            // yaw tilt from thrusting comes here:
+            // assuming that 0, 0, 0
+            Quaternion tempTilt = Quaternion.Euler(0, 0, tiltAmount);
+
+
+            transform.localRotation = tempRot * tempTilt;
         }
     }
 

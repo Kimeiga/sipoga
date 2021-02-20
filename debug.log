@@ -1,3 +1,6 @@
 [0610/163130.702:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0610/163130.702:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0610/163130.702:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[1128/223739.973:ERROR:network_change_notifier_win.cc(156)] WSALookupServiceBegin failed with: 0
+[1128/235816.004:ERROR:command_buffer_proxy_impl.cc(124)] ContextResult::kTransientFailure: Failed to send GpuChannelMsg_CreateCommandBuffer.
+[1214/144348.581:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

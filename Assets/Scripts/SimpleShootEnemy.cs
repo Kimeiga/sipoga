@@ -22,13 +22,13 @@ public class SimpleShootEnemy : MonoBehaviour
     void Start()
     {
         player = GetComponent<Player>();
-        head = player.head;
+        head = player.body.head;
     }
     
     private bool IsValidEnemy(Player obj)
     {
         // is in FOV
-        Transform enemyHead = obj.head;     
+        Transform enemyHead = obj.body.head;     
         Vector3 relativeNormalizedPos = (enemyHead.position - head.transform.position).normalized;
                 
         float dot = Vector3.Dot(relativeNormalizedPos, head.forward);
@@ -141,7 +141,7 @@ public class SimpleShootEnemy : MonoBehaviour
             // but not the other way around
 
             RaycastHit hit;
-            if (Physics.Linecast(head.transform.position, targetEnemy.head.transform.position, out hit, seeEnemyMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Linecast(head.transform.position, targetEnemy.body.head.transform.position, out hit, seeEnemyMask, QueryTriggerInteraction.Ignore))
             {
                 // if the target enemy gets behind cover (their head is no longer visible), then we dont have a target enemy anymore
                 targetEnemy = null;
@@ -197,7 +197,7 @@ public class SimpleShootEnemy : MonoBehaviour
 //        transform.localRotation = Quaternion.Euler(test2);
             
                 
-        head.transform.LookAt(targetEnemy.head.transform);
+        head.transform.LookAt(targetEnemy.body.head.transform);
         Vector3 clampedHeadRotation = head.transform.localRotation.eulerAngles;
         clampedHeadRotation.y = 0;
         clampedHeadRotation.z = 0;

@@ -3,104 +3,113 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //some item types i came up with
-public enum ItemType { Melee, Gun, Gadget, Sundry }
+public enum ItemType
+{
+	Melee,
+	Gun,
+	Gadget,
+	Sundry
+}
 
 
 public class Item : MonoBehaviour
 {
+	[Header("Classification")]
+	//this isn't really that important anymore, but maybe it will help with making the UI specilized or something;
+	//can't hurt
+	public ItemType type;
 
-    [Header("Classification")]
-    //this isn't really that important anymore, but maybe it will help with making the UI specilized or something;
-    //can't hurt
-    public ItemType type;
-    public string itemName;
+	public string itemName;
+	
+	// references
+	internal Rigidbody rigidbody;
 
-    //is the item in player's hands?
-    public bool active = false;
+	//is the item in player's hands?
+	public bool active = false;
 
-    [Space(10)]
-    [Header("Holding")]
+	[Space(10)] [Header("Holding")]
 
-    //hand holds
-    public Transform rightHandHold;
-    public Transform leftHandHold;
+	//hand holds
+	public Transform rightHandHold;
 
-    //base local pos/rot for holding
-    public Vector3 localHoldPosition;
-    public Vector3 localHoldRotation;
+	public Transform leftHandHold;
 
-
-    public Collider col;
+	//base local pos/rot for holding
+	public Vector3 localHoldPosition;
+	public Vector3 localHoldRotation;
 
 
+	public Collider collider;
 
 
 	//color changing when being aimed at stuff
 
-    private bool highlighted = false;
+	private bool highlighted = false;
 
-    private List<Material> itemMaterials = new List<Material>();
+	private List<Material> itemMaterials = new List<Material>();
 
-    private Color[] initialEmissionColors;
-    public float colorMod = 5;
-    private Color[] finalEmissionColors;
+	private Color[] initialEmissionColors;
+	public float colorMod = 5;
+	private Color[] finalEmissionColors;
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
+		rigidbody = gameObject.GetComponent<Rigidbody>();
+		
+		//Inspector derp failsafes
 
-        //Inspector derp failsafes
+		//if I didn't set the collider
+		if (collider == null)
+		{
+			//use the one on the root
+			collider = gameObject.GetComponent<Collider>();
 
-        //if I didn't set the collider
-        if(col == null){
-
-            //use the one on the root
-            col = gameObject.GetComponent<Collider>();
-
-            //if there isn't one
-            if(col == null){
-
-                //iterate through the kids
+			//if there isn't one
+			if (collider == null)
+			{
+				//iterate through the kids
 				foreach (Transform child in transform)
 				{
+					//if the current kid has a collider
+					if (child.gameObject.GetComponent<Collider>() != null)
+					{
+						//just use that one
+						collider = child.gameObject.GetComponent<Collider>();
 
-                    //if the current kid has a collider
-                    if(child.gameObject.GetComponent<Collider>() != null){
-
-                        //just use that one
-                        col = child.gameObject.GetComponent<Collider>();
-
-                        //break: therefore the first kid with the collider wins
-                        break;
-                    }
+						//break: therefore the first kid with the collider wins
+						break;
+					}
 				}
-            }
+			}
+		}
 
-        }
-
-        //if I didn't set right hand hold
-        if(rightHandHold == null){
-            rightHandHold = transform.Find("Right Hand Hold");
-        }
+		//if I didn't set right hand hold
+		if (rightHandHold == null)
+		{
+			rightHandHold = transform.Find("Right Hand Hold");
+		}
 
 		//if I didn't set left hand hold
 		if (leftHandHold == null)
 		{
-            leftHandHold = transform.Find("Left Hand Hold");
+			leftHandHold = transform.Find("Left Hand Hold");
 		}
 
 		//end derp failsafes...
 
-        //initialize the lists of the item's renderers and materials
+		//initialize the lists of the item's renderers and materials
 
-        //add whatever renderer or material might be on the root object
-        if(GetComponent<Renderer>() != null){
-            Renderer ren1 = GetComponent<Renderer>();
+		//add whatever renderer or material might be on the root object
+		if (GetComponent<Renderer>() != null)
+		{
+			Renderer ren1 = GetComponent<Renderer>();
 
-            itemMaterials.Add(ren1.material);
-        }
+			itemMaterials.Add(ren1.material);
+		}
 
 
-        //now iterate through children for further renderers and materials
+		//now iterate through children for further renderers and materials
 		Component[] childRenderers = GetComponentsInChildren(typeof(Renderer));
 
 		foreach (Renderer ren in childRenderers)
@@ -113,11 +122,11 @@ public class Item : MonoBehaviour
 		initialEmissionColors = new Color[itemMaterials.Count];
 		finalEmissionColors = new Color[initialEmissionColors.Length];
 
-        //populate initial and final emission colors
-        for (int i = 0; i < itemMaterials.Count; i++)
-        {
-            //enable emission color if not enabled already
-            itemMaterials[i].EnableKeyword("_EMISSION");
+		//populate initial and final emission colors
+		for (int i = 0; i < itemMaterials.Count; i++)
+		{
+			//enable emission color if not enabled already
+			itemMaterials[i].EnableKeyword("_EMISSION");
 
 			//set the initial and final colors for the lerps
 			initialEmissionColors[i] = itemMaterials[i].GetColor("_EmissionColor");
@@ -125,47 +134,80 @@ public class Item : MonoBehaviour
 			//if it's black, just use grey as highlight emission color
 			if (itemMaterials[i].GetColor("_EmissionColor") == Color.black)
 			{
-                //if grey is too bright/dark, we can always change this around
+				//if grey is too bright/dark, we can always change this around
 				finalEmissionColors[i] = Color.grey;
 			}
 			else
 			{
-                //if not, then multiply the base color to get a nice highlight emission color
-                //colorMod will take some playing around with...
+				//if not, then multiply the base color to get a nice highlight emission color
+				//colorMod will take some playing around with...
 				finalEmissionColors[i] = itemMaterials[i].GetColor("_EmissionColor") * colorMod;
 			}
-
-
-        }
-
-
-    }
-	
-	// Update is called once per frame
-	void FixedUpdate () {
-
-
+		}
 	}
 
-    public void Highlight(){
+	// Update is called once per frame
+	void FixedUpdate()
+	{
+	}
 
-        highlighted = true;
+	public void Highlight()
+	{
+		highlighted = true;
 
 		for (int i = 0; i < itemMaterials.Count; i++)
 		{
 			itemMaterials[i].SetColor("_EmissionColor", finalEmissionColors[i]);
 		}
-    }
+	}
 
-    public void Unhighlight(){
-
-        highlighted = false;
+	public void Unhighlight()
+	{
+		highlighted = false;
 
 		for (int i = 0; i < itemMaterials.Count; i++)
 		{
 			itemMaterials[i].SetColor("_EmissionColor", initialEmissionColors[i]);
 		}
-		
-    }
+	}
 
+	// Inventory script should call this function before grabbing a weapon. This should turn off the
+	// rigidbody, set the layer for all the parts of the item to Player Item, and do all the other things
+	public void PrepareForGrab()
+	{
+		rigidbody.isKinematic = true;
+		rigidbody.useGravity = false;
+		collider.enabled = false;
+		active = true;
+
+
+		// TODO: this code needs to be on something on the player's camera remember? 
+		// //put item on Player Item Layer so it doesn't appear to clip through walls
+		// gameObject.layer = LayerMask.NameToLayer("Player Item");
+		//
+		// //do this for all its children
+		// Transform[] childTransforms = gameObject.GetComponentsInChildren<Transform>();
+		// foreach (Transform trans in childTransforms)
+		// {
+		// 	trans.gameObject.layer = LayerMask.NameToLayer("Player Item");
+		// }
+	}
+
+	public void PrepareForRelease()
+	{
+		rigidbody.isKinematic = false;
+		rigidbody.useGravity = true;
+		collider.enabled = true;
+		active = false;
+
+		// //put item on Player Item Layer so it doesn't appear to clip through walls
+		// gameObject.layer = LayerMask.NameToLayer("Item");
+		//
+		// //do this for all its children
+		// Transform[] childTransforms = gameObject.GetComponentsInChildren<Transform>();
+		// foreach (Transform trans in childTransforms)
+		// {
+		// 	trans.gameObject.layer = LayerMask.NameToLayer("Item");
+		// }	
+	}
 }

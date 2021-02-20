@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 //public class ControlPoint
 //{
@@ -488,6 +489,11 @@ public class GameManager : MonoBehaviour
 
     public Transform[] uSpawns;
     public Transform[] tSpawns;
+
+    // this is a public list of items so that the AI can find the closest item to them when they need one
+    public List<GameObject> items = new List<GameObject>();
+    // this is to calculate the remaining path distances.
+    private NavMeshAgent dummyAgent; 
     
     private void Awake()
     {
@@ -523,6 +529,7 @@ public class GameManager : MonoBehaviour
         
         uTeam.AddAll(uStartingTeam);
         tTeam.AddAll(tStartingTeam);
+        dummyAgent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -530,5 +537,29 @@ public class GameManager : MonoBehaviour
     {
         uTeam.UpdatePositions();
         tTeam.UpdatePositions();
+    }
+
+    public GameObject FindClosestItem(Vector3 pos)
+    {
+        // find closest item by navigation distance using our dummy navmeshagent
+        transform.position = pos;
+
+        float minDistance = float.MaxValue;
+        GameObject closestItem = null;
+        foreach (GameObject item in items)
+        {
+            dummyAgent.destination = item.transform.position;
+
+            if (dummyAgent.remainingDistance < minDistance)
+            {
+                minDistance = dummyAgent.remainingDistance;
+                closestItem = item;
+            }
+        }
+        
+        // reset the game manager's position
+        transform.position = Vector3.zero;
+
+        return closestItem;
     }
 }

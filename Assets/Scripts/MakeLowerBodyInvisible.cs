@@ -1,48 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MakeLowerBodyInvisible : MonoBehaviour
 {
-    public Player player;
+	/// <summary>
+	/// This script runs when this player's camera is turned on.
+	/// It makes this player's lower body invisible.
+	/// It makes this player's hands (and item in a sec) render on top of things.
+	/// </summary>
+	
+	private Player player;
 
-    [SerializeField]
-    private bool activated = false;
-    public bool Activated
-    {
-        get { return activated; }
-        set
-        {
-            if (value)
-            {
-                player.MakeLowerBodyInvisible();
-            }
-            else
-            {
-                player.MakeLowerBodyVisible();
-            }
-            activated = value;
-        }
-    }
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        player = transform.root.GetComponent<Player>();
+	void Awake()
+	{
+		player = transform.root.GetComponent<Player>();
+	}
 
-        if (Activated)
-        {
-            player.MakeLowerBodyInvisible();
-        }
-        else
-        {
-            player.MakeLowerBodyVisible();
-        }
-    }
+	private void OnEnable()
+	{
+		player.MakeLowerBodyInvisible();
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void OnDisable()
+	{
+		player.MakeLowerBodyVisible();
+	}
+
+	void OnDestroy()
+	{
+		player.MakeLowerBodyVisible();
+	}
 }

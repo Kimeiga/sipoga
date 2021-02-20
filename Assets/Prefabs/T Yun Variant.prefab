@@ -40,7 +40,7 @@ PrefabInstance:
     - target: {fileID: 3402214108317431810, guid: 65e5808a51c1f764cb909274609b518b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.198
+      value: 26.126
       objectReference: {fileID: 0}
     - target: {fileID: 3402214108317431810, guid: 65e5808a51c1f764cb909274609b518b,
         type: 3}
@@ -95,7 +95,7 @@ PrefabInstance:
     - target: {fileID: 3402214108317431811, guid: 65e5808a51c1f764cb909274609b518b,
         type: 3}
       propertyPath: m_Name
-      value: T Yun
+      value: T Yun Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3402214108407859846, guid: 65e5808a51c1f764cb909274609b518b,
         type: 3}
@@ -181,6 +181,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8012273922329816696, guid: 65e5808a51c1f764cb909274609b518b,
+        type: 3}
+      propertyPath: activated
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65e5808a51c1f764cb909274609b518b, type: 3}

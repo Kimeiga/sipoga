@@ -54,7 +54,7 @@ public class CameraControls : MonoBehaviour
         
         // assumes people have the same sensitivity for X as Y
         // we could keep track of both x and y if this is not true, but this is an unlikely use case.
-        originalSensitivity = playerScript.bodyMouseLook.sensitivityX;
+        originalSensitivity = playerScript.body.bodyMouseLook.sensitivityX;
 
         zoomSensitivity = originalSensitivity * zoomSensitivityMod;
     }
@@ -67,8 +67,8 @@ public class CameraControls : MonoBehaviour
             if(Mathf.Abs(playerCamera.fieldOfView - zoomFOV) > 0.001f)
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, zoomFOV, zoomSpeed * Time.deltaTime);
 
-            playerScript.bodyMouseLook.sensitivityX = zoomSensitivity;
-            playerScript.headMouseLook.sensitivityY = zoomSensitivity;
+            playerScript.body.bodyMouseLook.sensitivityX = zoomSensitivity;
+            playerScript.body.headMouseLook.sensitivityY = zoomSensitivity;
         }
         else
         {
@@ -76,8 +76,8 @@ public class CameraControls : MonoBehaviour
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, originalFOV, zoomSpeed * Time.deltaTime);
             
             
-            playerScript.bodyMouseLook.sensitivityX = originalSensitivity;
-            playerScript.headMouseLook.sensitivityY = originalSensitivity;
+            playerScript.body.bodyMouseLook.sensitivityX = originalSensitivity;
+            playerScript.body.headMouseLook.sensitivityY = originalSensitivity;
         }
     }
 }

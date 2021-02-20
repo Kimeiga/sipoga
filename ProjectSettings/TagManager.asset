@@ -6,6 +6,9 @@ TagManager:
   tags:
   - U
   - T
+  - Poga
+  - Yena
+  - Cana
   layers:
   - Default
   - TransparentFX
@@ -15,11 +18,11 @@ TagManager:
   - UI
   - 
   - 
-  - Invisible Body
-  - U
-  - T
-  - Control Point
-  - 
+  - PostProcessing
+  - Poga
+  - Item
+  - Current Player Item
+  - Current Player Hands
   - 
   - 
   - 
